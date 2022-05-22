@@ -1,43 +1,60 @@
 import { Scene } from "./Scene";
 import { Game } from "../Main/Game";
-import { MyMath } from "../Main/MyMath";
+import { Vector } from "../Main/Vector";
+//Buttons
+import { ButtonManager } from "../Button/ButtonManager";
+import { UITransitionButton } from "../Button/UITransitionButton";
 //Gameobjects
 import { GameobjectManager } from "../GameObject/GameobjectManager";
 import { Gameobject } from "../GameObject/Gameobject";
-import { ExampleGameObject } from "../GameObject/ExampleGameObject";
-import { Vector } from "../Main/Vector";
+import { Background } from "../GameObject/Background";
+import { PuzzleManager } from "../Game/PuzzleManager";
+import { CameraControl } from "../GameObject/CameraControl";
+
 
 class GameScene implements Scene
 {
     private game_: Game; //if a function that all scenes need, put it in "Game" and use this reference to access it
     private gom_: GameobjectManager;
+    private pm_: PuzzleManager | undefined;
+    private bm_: ButtonManager;
 
     constructor(game: Game) 
     {
         //defaults, just to initialize
         this.game_ = game;
         this.gom_ = new GameobjectManager();
+        this.bm_ = new ButtonManager();
     }
 
     public Init() 
     {
-        const math: MyMath = new MyMath();
-        var size: Vector = math.GetCanvasScale(new Vector(16, 9));
-        const x = size.x - 20;
-        const y = size.y - 20;
-        this.Add(new ExampleGameObject("Example", "EX", 0, new Vector(10, 10), new Vector(x, y), "Green"));
+        //this.Add(new Background("Background", "Background", 0, new Vector(-32, -32), new Vector(32*11, 32*11), "#888888"));
+        this.Add(new CameraControl("CameraControl", "CC", 0, new Vector(9*32/2, 9*32/2), this.game_.CAMERA));
+        this.pm_ = new PuzzleManager(this, this.game_.STATS, this.game_.CAMERA);
+
+        this.bm_.Init(); //button init
+        this.bm_.Add(new UITransitionButton(this, new Vector(0, 0), new Vector(32, 32), "Button_Return.png", "Menu"));
     }
     
-    public Update(delta_time: number) 
+    public Update(delta_time: number)
     {
         this.gom_.RemoveDead(); //delete dead objects
         this.gom_.Update(delta_time);
     }
 
-    public Draw(main_ctx: CanvasRenderingContext2D) 
+    public Draw(main_ctx: CanvasRenderingContext2D)
     {
-        this.gom_.Draw(main_ctx);
-        this.gom_.DelayedDraw(main_ctx);
+        // this.gom_.Draw(main_ctx);
+        // this.gom_.DelayedDraw(main_ctx);
+        this.gom_.DrawWithCulling(main_ctx, this.game_.CAMERA); //First Draw
+        this.gom_.DelayedDrawWithCulling(main_ctx, this.game_.CAMERA); //Second draw (for things that should be above other objects - I.E. Player)
+        if (this.game_.CAMERA.UI_CANVAS.CONTEXT !== null) 
+        {//third draw - UI stuff - drawn on a seperate canvas (held within the camera class)
+            this.gom_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
+            this.bm_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
+        }
+        this.game_.CAMERA.DrawUI(main_ctx); //then drawn on top of the main canvas
     }
 
     public ChangeScene(sceneName: string)
@@ -73,6 +90,7 @@ class GameScene implements Scene
     public End()
     {
         this.gom_.Clear(); //remove objects
+        this.bm_.Clear(); //remove buttons
     }
 }
 

@@ -2,7 +2,7 @@ import { Gameobject } from "./Gameobject";
 import { Vector } from "../Main/Vector";
 import { Canvas } from "../Main/Canvas";
 
-class ExampleGameObject extends Gameobject
+class Background extends Gameobject
 {
     private color_: string;
     private canvas_: Canvas;
@@ -22,6 +22,8 @@ class ExampleGameObject extends Gameobject
         if (this.canvas_.CONTEXT === null) return;
         this.canvas_.CONTEXT.fillStyle = this.color_;
         this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);
+
+        this.ALLOWCULLING = false; //always draw background (even if not within the camera viewpoint, though it should always be anyways...)
     }
 
     public Update(delta_time: number) 
@@ -36,4 +38,4 @@ class ExampleGameObject extends Gameobject
     }
 }
 
-export {ExampleGameObject};
+export {Background};

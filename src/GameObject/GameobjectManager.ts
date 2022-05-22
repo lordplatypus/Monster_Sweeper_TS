@@ -1,4 +1,6 @@
 import { Gameobject } from "./Gameobject";
+//import { Quad } from "../Main/Quad";
+import { Camera } from "../Main/Camera";
 
 class GameobjectManager
 {
@@ -14,14 +16,6 @@ class GameobjectManager
         for (var i = 0; i < this.gameobjects_.length; i++)
         {
             this.gameobjects_[i].Update(delta_time);
-        }
-    }
-
-    TurnUpdate(turnsPassed: number)
-    {//Update all gameobjects at controlled intervals
-        for (var i = 0; i < this.gameobjects_.length; i++)
-        {
-            this.gameobjects_[i].TurnUpdate(turnsPassed);
         }
     }
 
@@ -41,6 +35,30 @@ class GameobjectManager
         }
     }
 
+    DrawWithCulling(main_ctx: CanvasRenderingContext2D, camera: Camera)
+    {//draw objects only within the camera viewpoint  
+        for (var i = 0; i < this.gameobjects_.length; i++)
+        {
+            if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].Draw(main_ctx);  
+        }
+    }
+
+    DelayedDrawWithCulling(main_ctx: CanvasRenderingContext2D, camera: Camera)
+    {//draw objects only within the camera viewpoint  
+        for (var i = 0; i < this.gameobjects_.length; i++)
+        {
+            if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].DelayedDraw(main_ctx);
+        }
+    }
+
+    UIDraw(camera_ctx: CanvasRenderingContext2D)
+    {//Meant only for UI
+        for (var i = 0; i < this.gameobjects_.length; i++)
+        {
+            this.gameobjects_[i].UIDraw(camera_ctx);
+        }
+    }
+
     Add(object: Gameobject)
     {
         this.gameobjects_.push(object);
@@ -48,19 +66,9 @@ class GameobjectManager
 
     RemoveDead()
     {
-        // for (auto i = gameObjects_.begin(); i != gameObjects_.end(); )
-        // {
-        //     if ((*i)->IsDead() && (*i)->GetTag() != "Player")
-        //     {
-        //         delete *i;
-        //         i = gameObjects_.erase(i);
-        //     }
-        //     else i++;
-        // }
-
         for (var i = 0; i < this.gameobjects_.length; )
         {
-            if (this.gameobjects_[i].Dead) 
+            if (this.gameobjects_[i].DEAD) 
             {
                 this.gameobjects_[i].Deconstructor();
                 delete this.gameobjects_[i];
@@ -74,7 +82,7 @@ class GameobjectManager
     {
         for (var i = 0; i < this.gameobjects_.length; i++)
         {
-            if (this.gameobjects_[i].Name === name && this.gameobjects_[i].Tag === tag && this.gameobjects_[i].ID === ID) return this.gameobjects_[i];
+            if (this.gameobjects_[i].NAME === name && this.gameobjects_[i].TAG === tag && this.gameobjects_[i].ID === ID) return this.gameobjects_[i];
         }
         return null;
     }
@@ -83,7 +91,7 @@ class GameobjectManager
     {
         for (var i = 0; i < this.gameobjects_.length; i++)
         {
-            if (this.gameobjects_[i].Name === name) return this.gameobjects_[i];
+            if (this.gameobjects_[i].NAME === name) return this.gameobjects_[i];
         }
         return null;
     }
@@ -92,7 +100,7 @@ class GameobjectManager
     {
         for (var i = 0; i < this.gameobjects_.length; i++)
         {
-            if (this.gameobjects_[i].Tag === tag) return this.gameobjects_[i];
+            if (this.gameobjects_[i].TAG === tag) return this.gameobjects_[i];
         }
         return null;
     }
@@ -104,6 +112,26 @@ class GameobjectManager
             if (this.gameobjects_[i].ID === ID) return this.gameobjects_[i];
         }
         return null;
+    }
+
+    CheckCollision()
+    {
+        for (var i = 0; i < this.gameobjects_.length; i++)
+        {
+            if (!this.gameobjects_[i].ALLOWCOLLISIONS) continue; //ignore objects that don't have the "ALLOWCOLLISIONS" flag active
+            if (this.gameobjects_[i].DEAD) continue; //ignore objects that are marked for deletion
+            for (var j = 0; j < this.gameobjects_.length; j++)
+            {
+                if (!this.gameobjects_[j].ALLOWCOLLISIONS) continue; //ignore objects that don't have the "ALLOWCOLLISIONS" flag active
+                if (this.gameobjects_[j].DEAD) continue; //ignore objects that are marked for deletion
+                if (this.gameobjects_[i] === this.gameobjects_[j]) continue; //don't check collision against self
+                if (this.gameobjects_[i].Hitbox().Intersect(this.gameobjects_[j].Hitbox()))
+                {
+                    this.gameobjects_[i].OnCollision(this.gameobjects_[j]);
+                    this.gameobjects_[j].OnCollision(this.gameobjects_[i]);
+                }
+            }
+        }
     }
 
     Clear()
