@@ -1,6 +1,7 @@
 import { Gameobject } from "./Gameobject";
 import { Vector } from "../Main/Vector";
 import { Canvas } from "../Main/Canvas";
+import { Layers } from "../Main/Layers";
 
 class Background extends Gameobject
 {
@@ -32,9 +33,9 @@ class Background extends Gameobject
     public TurnUpdate(turnsPassed: number) 
     {}
 
-    public Draw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        main_ctx.drawImage(this.canvas_.CANVAS, this.position_.x, this.position_.y);
+        layers.DrawToLayer("Background", this.canvas_.CANVAS, this.position_.x, this.position_.y);
     }
 }
 

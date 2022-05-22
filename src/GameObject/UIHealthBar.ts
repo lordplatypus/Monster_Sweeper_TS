@@ -1,6 +1,7 @@
 import { Gameobject } from "./Gameobject";
 import { Vector } from "../Main/Vector";
 import { Canvas } from "../Main/Canvas";
+import { Layers } from "../Main/Layers";
 
 class UIHealthBar extends Gameobject
 {
@@ -21,6 +22,7 @@ class UIHealthBar extends Gameobject
         this.height_ = 16;
         this.maxHP_ = maxHP;
         this.HP_ = this.maxHP_;
+        this.ALLOWCULLING = false;
 
         this.canvas_ = new Canvas(this.width_, this.height_);
 
@@ -39,9 +41,9 @@ class UIHealthBar extends Gameobject
         this.UpdateCanvas(); //just to set up canvas
     }
 
-    public UIDraw(camera_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        camera_ctx.drawImage(this.canvas_.CANVAS, this.position_.x, this.position_.y);
+        layers.DrawToUI(this.canvas_.CANVAS, 0, 0, this.width_, this.height_, this.position_.x, this.position_.y, this.width_, this.height_);
     }
 
     private UpdateCanvas()

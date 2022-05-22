@@ -11,10 +11,11 @@ class Layers
 
         this.layers_.set("Background", new Canvas(width, height, "Background")); //The Background
         this.layers_.set("Tile", new Canvas(width, height, "Tile")); //Tiles (dust, tundra, forest, etc)
-        this.layers_.set("Objects", new Canvas(width, height, "Objects")); //Game objects (monsters, trees, flowers, etc)
+        this.layers_.set("Object", new Canvas(width, height, "Object")); //Game objects (monsters, trees, flowers, etc)
         this.layers_.set("Number", new Canvas(width, height, "Number")); //Numbers (where the bombs are)
+        this.layers_.set("Dust", new Canvas(width, height, "Dust")); //Dust Tiles that hide numbers and monsters
         this.layers_.set("Player", new Canvas(width, height, "Player")); //The player character
-        this.layers_.set("Particles", new Canvas(width, height, "Particles")); //particle effects
+        this.layers_.set("Particle", new Canvas(width, height, "Particle")); //particle effects
         //this.layers_.set("UI", new Canvas(width, height, "UI")); //UI
 
         this.uiLayer_ = new Canvas(width, height, "UI");
@@ -53,6 +54,11 @@ class Layers
         const layer: Canvas | undefined = this.GetLayer(layerName);
         if (layer === undefined) return;
         layer.CONTEXT?.drawImage(drawable, x, y);
+    }
+
+    public DrawToUI(drawable: CanvasImageSource, spriteX: number, spriteY: number, spriteWidth: number, spriteHeight: number, x: number, y: number, width: number, height: number)
+    {//Draw "drawable" object (image, canvas, etc.) to the UI layer
+        this.uiLayer_.CONTEXT?.drawImage(drawable, spriteX, spriteY, spriteWidth, spriteHeight, x, y, width, height);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 import { Scene } from "./Scene";
 import { Game } from "../Main/Game";
 import { Vector } from "../Main/Vector";
+import { Layers } from "../Main/Layers";
 //Buttons
 import { ButtonManager } from "../Button/ButtonManager";
 import { UITransitionButton } from "../Button/UITransitionButton";
@@ -43,18 +44,19 @@ class GameScene implements Scene
         this.gom_.Update(delta_time);
     }
 
-    public Draw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
         // this.gom_.Draw(main_ctx);
         // this.gom_.DelayedDraw(main_ctx);
-        this.gom_.DrawWithCulling(main_ctx, this.game_.CAMERA); //First Draw
-        this.gom_.DelayedDrawWithCulling(main_ctx, this.game_.CAMERA); //Second draw (for things that should be above other objects - I.E. Player)
-        if (this.game_.CAMERA.UI_CANVAS.CONTEXT !== null) 
-        {//third draw - UI stuff - drawn on a seperate canvas (held within the camera class)
-            this.gom_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
-            this.bm_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
-        }
-        this.game_.CAMERA.DrawUI(main_ctx); //then drawn on top of the main canvas
+        this.gom_.DrawWithCulling(layers, this.game_.CAMERA); //First Draw
+        this.bm_.Draw(layers);
+        //this.gom_.DelayedDrawWithCulling(layers, this.game_.CAMERA); //Second draw (for things that should be above other objects - I.E. Player)
+        // if (this.game_.CAMERA.UI_CANVAS.CONTEXT !== null) 
+        // {//third draw - UI stuff - drawn on a seperate canvas (held within the camera class)
+        //     this.gom_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
+        //     this.bm_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
+        // }
+        // this.game_.CAMERA.DrawUI(main_ctx); //then drawn on top of the main canvas
     }
 
     public ChangeScene(sceneName: string)

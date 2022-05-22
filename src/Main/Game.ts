@@ -1,5 +1,6 @@
 import { Camera } from "./Camera";
 import { Stats } from "./Stats";
+import { Layers } from "./Layers";
 //Scenes
 import { Scene } from "../Scene/Scene";
 import { GameScene } from "../Scene/GameScene";
@@ -41,9 +42,9 @@ class Game
         this.scenes_.get(this.currentScene_)?.Update(delta_time);
     }
 
-    public Draw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        this.scenes_.get(this.currentScene_)?.Draw(main_ctx);
+        this.scenes_.get(this.currentScene_)?.Draw(layers);
     }
 
     public get CAMERA(): Camera {return this.camera_;}

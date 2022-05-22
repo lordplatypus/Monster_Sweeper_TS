@@ -25,12 +25,6 @@ class CameraControl extends Gameobject
         this.camera_.CENTER = new Vector(this.position_.x, this.position_.y);
     }
 
-    public TurnUpdate(turnsPassed: number) 
-    {}
-
-    public DelayedDraw(main_ctx: CanvasRenderingContext2D)
-    {}
-
     private KeyDown = (input: KeyboardEvent) =>
     {
         if (input.key === "a") this.position_.x -= 32;

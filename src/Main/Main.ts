@@ -2,6 +2,7 @@ import { Game } from "./Game";
 import { Calculations } from "./Calculations";
 import { Vector } from "./Vector";
 import { Camera } from "./Camera";
+import { Layers } from "./Layers";
 
 var past = Date.now();
 function delta_time()
@@ -21,7 +22,7 @@ const main_canvas_: HTMLCanvasElement = <HTMLCanvasElement>$("main_canvas");
 const canvasSize: Vector = new Vector(480, 270);
 main_canvas_.width = canvasSize.x;
 main_canvas_.height = canvasSize.y;
-const main_ctx_: CanvasRenderingContext2D | null= main_canvas_.getContext("2d");
+const main_ctx_: CanvasRenderingContext2D | null = main_canvas_.getContext("2d");
 
 //Canvas Scale - to make pixel art not blurry
 const canvasScale: Vector = calcs_.GetCanvasSize(new Vector(16, 9));
@@ -29,6 +30,8 @@ main_canvas_.style.width = canvasScale.x + "px";
 main_canvas_.style.height = canvasScale.y + "px";
 main_canvas_.style.imageRendering = "pixelated";
 
+//Layers
+const layers_: Layers = new Layers(canvasScale.x, canvasScale.y);
 
 Main();
 
@@ -37,17 +40,20 @@ function Main()
     game_.Update(delta_time()); //UPDATE
 
     if (main_ctx_ !== null)
-    {
-        main_ctx_.setTransform(1,0,0,1,0,0);
+    {//DRAW
+        main_ctx_.setTransform(1,0,0,1,0,0); //reset position
         main_ctx_.fillStyle = "black"; //set background color
         main_ctx_.fillRect(0, 0, main_canvas_.getBoundingClientRect().width, main_canvas_.getBoundingClientRect().height); //clear the canvas and fill it with black
         
-        const camera_center: Vector = camera_.CENTER;
-        main_ctx_.translate(camera_center.x, camera_center.y);
+        const camera_center: Vector = camera_.CENTER; //get camera center
+        main_ctx_.translate(camera_center.x, camera_center.y); //move to camera point of view
 
-        game_.Draw(main_ctx_);
+        //game_.Draw(main_ctx_);
+        game_.Draw(layers_);
+        layers_.Draw(main_ctx_); //Draw Layers to the Main Canvas
+        layers_.DrawUI(main_ctx_, camera_.VIEWPORT.X, camera_.VIEWPORT.Y); //Draw UI to the Main Canvas
     }
-    window.requestAnimationFrame(Main);
+    window.requestAnimationFrame(Main); //Next Frame
 }
 
 function $(id: string)

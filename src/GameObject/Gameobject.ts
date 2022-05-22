@@ -1,5 +1,6 @@
 import { Vector } from "../Main/Vector";
 import { Quad } from "../Main/Quad";
+import { Layers } from "../Main/Layers";
 
 class Gameobject
 {
@@ -23,9 +24,9 @@ class Gameobject
     private isDead_: boolean = false; //set to true for it to be removed when GameManager.RemoveDead() is called
 
     public Update(delta_time: number) {}
-    public Draw(main_ctx: CanvasRenderingContext2D) {}
-    public DelayedDraw(main_ctx: CanvasRenderingContext2D) {}
-    public UIDraw(camera_ctx: CanvasRenderingContext2D) {}
+    public Draw(layers: Layers) {}
+    //public DelayedDraw(main_ctx: CanvasRenderingContext2D) {}
+    //public UIDraw(camera_ctx: CanvasRenderingContext2D) {}
     public Hitbox(): Quad {return new Quad(this.position_.x + this.left_, this.position_.y + this.top_, 
         this.width_ - this.right_, this.height_ - this.bottom_);}
     public OnCollision(other: Gameobject) {}

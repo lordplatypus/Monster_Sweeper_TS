@@ -2,6 +2,7 @@ import { Gameobject } from "./Gameobject";
 import { Vector } from "../Main/Vector";
 import { Calculations } from "../Main/Calculations";
 import { Canvas } from "../Main/Canvas";
+import { Layers } from "../Main/Layers";
 import { PuzzleManager } from "../Game/PuzzleManager";
 
 class Monster extends Gameobject
@@ -28,9 +29,9 @@ class Monster extends Gameobject
         this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);
     }
 
-    public Draw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        main_ctx.drawImage(this.canvas_.CANVAS, this.position_.x, this.position_.y);
+        layers.DrawToLayer("Object", this.canvas_.CANVAS, this.position_.x, this.position_.y);
     }
 
     public OnCollision(other: Gameobject)

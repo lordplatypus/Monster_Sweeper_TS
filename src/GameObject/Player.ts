@@ -1,6 +1,7 @@
 import { Gameobject } from "./Gameobject";
 import { Vector } from "../Main/Vector";
 import { Canvas } from "../Main/Canvas";
+import { Layers } from "../Main/Layers";
 import { PuzzleManager } from "../Game/PuzzleManager";
 import { Calculations } from "../Main/Calculations";
 
@@ -55,9 +56,9 @@ class Player extends Gameobject
         this.AnimationHandle(delta_time); //animation calcs
     }
 
-    public DelayedDraw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        main_ctx.drawImage(this.canvas_.CANVAS, this.position_.x, this.position_.y); //draw canvas to main canvas
+        layers.DrawToLayer("Player", this.canvas_.CANVAS, this.position_.x, this.position_.y); //draw canvas to main canvas
     }
 
     public OnCollision(other: Gameobject)

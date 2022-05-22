@@ -1,6 +1,7 @@
 import { Gameobject } from "./Gameobject";
 import { Vector } from "../Main/Vector";
 import { Canvas } from "../Main/Canvas";
+import { Layers } from "../Main/Layers";
 import { Stats } from "../Main/Stats";
 
 class HiddenTileMap extends Gameobject
@@ -43,9 +44,9 @@ class HiddenTileMap extends Gameobject
         }
     }
 
-    public DelayedDraw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        main_ctx.drawImage(this.canvas_.CANVAS, this.position_.x, this.position_.y);
+        layers.DrawToLayer("Dust", this.canvas_.CANVAS, this.position_.x, this.position_.y)
     }
 
     private OnImgLoad = () =>

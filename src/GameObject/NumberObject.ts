@@ -1,5 +1,6 @@
 import { Gameobject } from "../GameObject/Gameobject";
 import { Vector } from "../Main/Vector";
+import { Layers } from "../Main/Layers";
 import { Number } from "../Main/Number";
 
 class NumberObject extends Gameobject
@@ -17,9 +18,9 @@ class NumberObject extends Gameobject
         this.number_ = new Number(num, "#000000");
     }
 
-    public Draw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        main_ctx.drawImage(this.number_.CANVAS.CANVAS, this.position_.x, this.position_.y);
+        layers.DrawToLayer("Number", this.number_.CANVAS.CANVAS, this.position_.x, this.position_.y);
     }
 
     public get NUMBER(): number {return this.number_.NUMBER;}

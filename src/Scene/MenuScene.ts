@@ -1,6 +1,7 @@
 import { Scene } from "./Scene";
 import { Game } from "../Main/Game";
 import { Vector } from "../Main/Vector";
+import { Layers } from "../Main/Layers";
 //Buttons
 import { ButtonManager } from "../Button/ButtonManager";
 import { TransitionButton } from "../Button/TransitionButton";
@@ -58,11 +59,11 @@ class MenuScene implements Scene
         this.gom_.Update(delta_time);
     }
 
-    public Draw(main_ctx: CanvasRenderingContext2D)
+    public Draw(layers: Layers)
     {
-        this.gom_.Draw(main_ctx);
-        this.gom_.DelayedDraw(main_ctx);
-        this.bm_.DelayedDraw(main_ctx);
+        this.gom_.Draw(layers);
+        //this.gom_.DelayedDraw(layers);
+        this.bm_.Draw(layers);
     }
 
     public ChangeScene(sceneName: string)

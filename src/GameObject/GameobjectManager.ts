@@ -1,6 +1,7 @@
 import { Gameobject } from "./Gameobject";
 //import { Quad } from "../Main/Quad";
 import { Camera } from "../Main/Camera";
+import { Layers } from "../Main/Layers";
 
 class GameobjectManager
 {
@@ -19,45 +20,45 @@ class GameobjectManager
         }
     }
 
-    Draw(main_ctx: CanvasRenderingContext2D)
+    Draw(layers: Layers)
     {//Regular draw phase
         for (var i = 0; i < this.gameobjects_.length; i++)
         {
-            this.gameobjects_[i].Draw(main_ctx);
+            this.gameobjects_[i].Draw(layers);
         }
     }
 
-    DelayedDraw(main_ctx: CanvasRenderingContext2D)
-    {//Called after the main draw phase, useful for UI
-        for (var i = 0; i < this.gameobjects_.length; i++)
-        {
-            this.gameobjects_[i].DelayedDraw(main_ctx);
-        }
-    }
+    // DelayedDraw(main_ctx: CanvasRenderingContext2D)
+    // {//Called after the main draw phase, useful for UI
+    //     for (var i = 0; i < this.gameobjects_.length; i++)
+    //     {
+    //         this.gameobjects_[i].DelayedDraw(main_ctx);
+    //     }
+    // }
 
-    DrawWithCulling(main_ctx: CanvasRenderingContext2D, camera: Camera)
+    DrawWithCulling(layers: Layers, camera: Camera)
     {//draw objects only within the camera viewpoint  
         for (var i = 0; i < this.gameobjects_.length; i++)
         {
-            if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].Draw(main_ctx);  
+            if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].Draw(layers);  
         }
     }
 
-    DelayedDrawWithCulling(main_ctx: CanvasRenderingContext2D, camera: Camera)
-    {//draw objects only within the camera viewpoint  
-        for (var i = 0; i < this.gameobjects_.length; i++)
-        {
-            if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].DelayedDraw(main_ctx);
-        }
-    }
+    // DelayedDrawWithCulling(main_ctx: CanvasRenderingContext2D, camera: Camera)
+    // {//draw objects only within the camera viewpoint  
+    //     for (var i = 0; i < this.gameobjects_.length; i++)
+    //     {
+    //         if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].DelayedDraw(main_ctx);
+    //     }
+    // }
 
-    UIDraw(camera_ctx: CanvasRenderingContext2D)
-    {//Meant only for UI
-        for (var i = 0; i < this.gameobjects_.length; i++)
-        {
-            this.gameobjects_[i].UIDraw(camera_ctx);
-        }
-    }
+    // UIDraw(camera_ctx: CanvasRenderingContext2D)
+    // {//Meant only for UI
+    //     for (var i = 0; i < this.gameobjects_.length; i++)
+    //     {
+    //         this.gameobjects_[i].UIDraw(camera_ctx);
+    //     }
+    // }
 
     Add(object: Gameobject)
     {

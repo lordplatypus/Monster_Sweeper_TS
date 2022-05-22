@@ -1,10 +1,11 @@
 import { Gameobject } from "../GameObject/Gameobject";
+import { Layers } from "../Main/Layers";
 
 interface Scene
 {
     Init() : void;
     Update(delta_time: number) : void;
-    Draw(main_ctx: CanvasRenderingContext2D) : void;
+    Draw(layers: Layers) : void;
     ChangeScene(sceneName: string) : void;
     Add(gameobject: Gameobject) : void;
     Search(name: string, tag: string, ID: number) : Gameobject | null;
