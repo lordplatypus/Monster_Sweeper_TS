@@ -74,7 +74,7 @@ class ObjectMap extends Gameobject
             for (var x = 0; x < this.map_[y].length; x++)
             {
                 if (this.map_[y][x] < 1) continue;
-                this.num_.SetNumber(this.map_[y][x]);
+                this.num_.SetNumber(this.map_[y][x], this.NumberColor(this.map_[y][x]));
                 tempCtx.drawImage(this.num_.CANVAS.CANVAS, x*this.stats_.TILE_SIZE+6, y*this.stats_.TILE_SIZE+4);
             }
         }
@@ -111,6 +111,36 @@ class ObjectMap extends Gameobject
     {
         if (this.map_[localPos.y][localPos.x] > 0) return true;
         return false;
+    }
+
+    private NumberColor(num: number) : string
+    {
+        switch(num)
+        {
+            case 2:
+            return "#ff00ff"; //Purple
+
+            case 3:
+            return "#0000ff"; //Blue
+
+            case 4:
+            return "#00ffff"; //Cyan
+
+            case 5:
+            return "#00ff00"; //Green
+
+            case 6:
+            return "#ffff00"; //Yellow
+
+            case 7:
+            return "#ff8000"; //Orange
+
+            case 8:
+            return "#ff0000"; //Red
+
+            default: //also covers "num = 1"
+            return "#ffffff"; //White
+        }
     }
 }
 

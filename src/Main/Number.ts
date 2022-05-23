@@ -18,7 +18,7 @@ class Number
         this.color_ = color === undefined ? "#ffffff" : color;
 
         this.digits_ = [];
-        this.width_ = 4 * 5; //width of one number in the "number" texture
+        this.width_ = 4 * 5; //width of one number in the "number" texture (number img is scaled up 500%)
         this.height_ = 5 * 5; //height of one number in the "number" texture
 
         this.img_ = new Image();
