@@ -12,6 +12,7 @@ interface Scene
     SearchByName(name: string) : Gameobject | null;
     SearchByTag(tag: string) : Gameobject | null;
     SearchByID(ID: number) : Gameobject | null;
+    SearchByTagAndID(tag: string, ID: number) : Gameobject | null;
     End() : void;
 }
 

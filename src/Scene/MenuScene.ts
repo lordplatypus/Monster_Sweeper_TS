@@ -62,7 +62,6 @@ class MenuScene implements Scene
     public Draw(layers: Layers)
     {
         this.gom_.Draw(layers);
-        //this.gom_.DelayedDraw(layers);
         this.bm_.Draw(layers);
     }
 
@@ -94,6 +93,11 @@ class MenuScene implements Scene
     public SearchByID(ID: number) : Gameobject | null
     {
         return this.gom_.SearchByID(ID);
+    }
+
+    public SearchByTagAndID(tag: string, ID: number) : Gameobject | null
+    {
+        return this.gom_.SearchByTagAndID(tag, ID);
     }
 
     public End()

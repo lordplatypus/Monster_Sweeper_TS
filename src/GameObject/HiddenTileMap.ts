@@ -85,12 +85,13 @@ class HiddenTileMap extends Gameobject
         this.canvas_.CONTEXT.drawImage(tempCanvas, 0, 0);
     }
 
-    public RemoveTile(localPos: Vector)
+    public RemoveTile(localPos: Vector): boolean
     {
-        if (!this.IsTile(localPos)) return;
+        if (!this.IsTile(localPos)) return false;
         this.map_[localPos.y][localPos.x] = 0;
         if (localPos.y === this.stats_.ROWS-1) this.map_[localPos.y+1][localPos.x] = 0; //for end tiles
         this.UpdateCanvas();
+        return true;
     }
 
     public Traversable(localPos: Vector): boolean

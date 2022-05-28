@@ -10,6 +10,8 @@ class Monster extends Gameobject
     private pm_: PuzzleManager;
     private color_: string;
     private canvas_: Canvas;
+
+    private alive_: boolean; //diff then isDead as isDead is used to delete this object (don't want that in this case)
     
     constructor(ID: number, position: Vector, pm: PuzzleManager, color?: string)
     {
@@ -22,11 +24,13 @@ class Monster extends Gameobject
         this.height_ = 16;
         this.pm_ = pm;
         this.color_ = color === undefined? "#ffffff" : color;
+        this.ALLOWCOLLISIONS = true;
+        this.alive_ = true;
 
         this.canvas_ = new Canvas(this.width_, this.height_);
         if (this.canvas_.CONTEXT === null) return;
         this.canvas_.CONTEXT.fillStyle = this.color_;
-        this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);
+        this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);    
     }
 
     public Draw(layers: Layers)
@@ -36,14 +40,16 @@ class Monster extends Gameobject
 
     public OnCollision(other: Gameobject)
     {
-        if (other.NAME !== "Player") return; //should only collide with the player
+        if (other.NAME !== "Player" || !this.alive_) return; //should only collide with the player and only when alive
 
         this.pm_.PLAYER_MANAGER.HP -= this.CalculatePower();
-        this.Kill();
+        const calcs_: Calculations = new Calculations(); //get calcs for next line
+        if (!this.pm_.HIDDEN_TILE_MAP.IsTile(calcs_.ConvertWorldToLocal(this.position_, this.pm_.STATS.TILE_SIZE))) this.Kill();
     }
 
     public Kill()
     {
+        this.alive_ = false;
         if (this.canvas_.CONTEXT === null) return;
         this.canvas_.CONTEXT.fillStyle = "Red";
         this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);

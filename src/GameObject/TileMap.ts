@@ -3,6 +3,11 @@ import { Vector } from "../Main/Vector";
 import { Canvas } from "../Main/Canvas";
 import { Layers } from "../Main/Layers";
 import { Stats } from "../Main/Stats";
+import { PuzzleManager } from "../Game/PuzzleManager";
+import { Calculations } from "../Main/Calculations";
+//TILES
+import { PlainTile } from "../Tiles/PlainTile";
+import { ForrestTile } from "../Tiles/ForrestTile";
 
 class TileMap extends Gameobject
 {
@@ -84,6 +89,29 @@ class TileMap extends Gameobject
         if (this.canvas_.CONTEXT === null) return;
         this.canvas_.Clear();
         this.canvas_.CONTEXT.drawImage(tempCanvas, 0, 0);
+    }
+
+    private GetTileID(localPos: Vector): number
+    {
+        return this.map_[localPos.y][localPos.x];
+    }
+
+    public AddTileElements(localPos: Vector, pm: PuzzleManager)
+    {
+        const calcs: Calculations = new Calculations();
+        switch(this.GetTileID(localPos))
+        {
+            default:
+            break;
+
+            case 1:
+            pm.SCENE.Add(new PlainTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+
+            case 2:
+            pm.SCENE.Add(new ForrestTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+        }
     }
 }
 

@@ -46,17 +46,8 @@ class GameScene implements Scene
 
     public Draw(layers: Layers)
     {
-        // this.gom_.Draw(main_ctx);
-        // this.gom_.DelayedDraw(main_ctx);
         this.gom_.DrawWithCulling(layers, this.game_.CAMERA); //First Draw
         this.bm_.Draw(layers);
-        //this.gom_.DelayedDrawWithCulling(layers, this.game_.CAMERA); //Second draw (for things that should be above other objects - I.E. Player)
-        // if (this.game_.CAMERA.UI_CANVAS.CONTEXT !== null) 
-        // {//third draw - UI stuff - drawn on a seperate canvas (held within the camera class)
-        //     this.gom_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
-        //     this.bm_.UIDraw(this.game_.CAMERA.UI_CANVAS.CONTEXT);
-        // }
-        // this.game_.CAMERA.DrawUI(main_ctx); //then drawn on top of the main canvas
     }
 
     public ChangeScene(sceneName: string)
@@ -87,6 +78,11 @@ class GameScene implements Scene
     public SearchByID(ID: number) : Gameobject | null
     {
         return this.gom_.SearchByID(ID);
+    }
+
+    public SearchByTagAndID(tag: string, ID: number) : Gameobject | null
+    {
+        return this.gom_.SearchByTagAndID(tag, ID);
     }
 
     public End()

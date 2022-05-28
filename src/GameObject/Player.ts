@@ -30,6 +30,7 @@ class Player extends Gameobject
         this.height_ = 32;
         this.pm_ = pm;
         this.calcs_ = new Calculations();
+        this.ALLOWCOLLISIONS = true;
 
         this.canvas_ = new Canvas(this.width_, this.height_); //set up canvas to draw the play image on
         this.playerImg_ = new Image(); //set up image object
@@ -110,13 +111,18 @@ class Player extends Gameobject
         const local: Vector = this.calcs_.ConvertWorldToLocal(targetPos, this.pm_.STATS.TILE_SIZE);
 
         if (this.pm_.HIDDEN_TILE_MAP.Traversable(local)) 
-        {//target tile is empty, thus player can move there without further checks
-            this.targetPos_ = targetPos;
-            return; 
+        {//target tile is empty, thus player can move there
+            this.targetPos_ = targetPos; //move
+            this.pm_.IsObject(local); //check for monster / item
+            return; //don't need other checks
         }
 
         //if the target position is not reachable(surrounded by occupied tiles), don't move and don't continue with other checks
-        if (!this.pm_.HIDDEN_TILE_MAP.Reachable(local)) return;
+        if (!this.pm_.HIDDEN_TILE_MAP.Reachable(local)) 
+        {
+            this.pm_.PARTICLE_MANAGER.QuestionMark(this.position_); //play confused particle
+            return;
+        }
 
         //From this point we know that the target pos is occupied but has an (or multiple) empty tile near by
         //Move player to an empty tile near the target tile
@@ -135,11 +141,11 @@ class Player extends Gameobject
         }
         this.targetPos_ = this.calcs_.ConvertLocalToWorld(emptyTilePos[minID], 32); //move player to the closest empty tile (near the actual tile clicked)
 
-        //Reveal Tile
-        this.pm_.HIDDEN_TILE_MAP.RemoveTile(local);
-
         //check object collision - if yes then OnCollision() will be called
         this.pm_.IsObject(local);
+
+        //Reveal Tile
+        this.pm_.RemoveHiddenTile(local);
     }
 
     private OnImgLoad = () =>

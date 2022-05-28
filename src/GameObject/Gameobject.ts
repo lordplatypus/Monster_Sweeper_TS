@@ -25,8 +25,6 @@ class Gameobject
 
     public Update(delta_time: number) {}
     public Draw(layers: Layers) {}
-    //public DelayedDraw(main_ctx: CanvasRenderingContext2D) {}
-    //public UIDraw(camera_ctx: CanvasRenderingContext2D) {}
     public Hitbox(): Quad {return new Quad(this.position_.x + this.left_, this.position_.y + this.top_, 
         this.width_ - this.right_, this.height_ - this.bottom_);}
     public OnCollision(other: Gameobject) {}

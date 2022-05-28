@@ -28,14 +28,6 @@ class GameobjectManager
         }
     }
 
-    // DelayedDraw(main_ctx: CanvasRenderingContext2D)
-    // {//Called after the main draw phase, useful for UI
-    //     for (var i = 0; i < this.gameobjects_.length; i++)
-    //     {
-    //         this.gameobjects_[i].DelayedDraw(main_ctx);
-    //     }
-    // }
-
     DrawWithCulling(layers: Layers, camera: Camera)
     {//draw objects only within the camera viewpoint  
         for (var i = 0; i < this.gameobjects_.length; i++)
@@ -43,22 +35,6 @@ class GameobjectManager
             if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].Draw(layers);  
         }
     }
-
-    // DelayedDrawWithCulling(main_ctx: CanvasRenderingContext2D, camera: Camera)
-    // {//draw objects only within the camera viewpoint  
-    //     for (var i = 0; i < this.gameobjects_.length; i++)
-    //     {
-    //         if (this.gameobjects_[i].Hitbox().Intersect(camera.VIEWPORT) || !this.gameobjects_[i].ALLOWCULLING) this.gameobjects_[i].DelayedDraw(main_ctx);
-    //     }
-    // }
-
-    // UIDraw(camera_ctx: CanvasRenderingContext2D)
-    // {//Meant only for UI
-    //     for (var i = 0; i < this.gameobjects_.length; i++)
-    //     {
-    //         this.gameobjects_[i].UIDraw(camera_ctx);
-    //     }
-    // }
 
     Add(object: Gameobject)
     {
@@ -111,6 +87,15 @@ class GameobjectManager
         for (var i = 0; i < this.gameobjects_.length; i++)
         {
             if (this.gameobjects_[i].ID === ID) return this.gameobjects_[i];
+        }
+        return null;
+    }
+
+    SearchByTagAndID(tag: string, ID: number): Gameobject | null
+    {
+        for (var i = 0; i < this.gameobjects_.length; i++)
+        {
+            if (this.gameobjects_[i].TAG === tag && this.gameobjects_[i].ID === ID) return this.gameobjects_[i];
         }
         return null;
     }
