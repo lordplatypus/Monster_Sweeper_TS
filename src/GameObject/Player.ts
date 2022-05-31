@@ -92,6 +92,7 @@ class Player extends Gameobject
 
     private Click = (event: MouseEvent) =>
     {
+        if (event.button !== 0) return; //0 = left mouse click (probably)
         const mainCanvas: HTMLCanvasElement  = <HTMLCanvasElement>document.getElementById("main_canvas");
         const canvasActualSize: Vector = this.calcs_.GetCanvasSize(new Vector(16, 9)); //actual size of the canvas element within the window 
         const mouseX: number = event.clientX; //Mouse click pos: x

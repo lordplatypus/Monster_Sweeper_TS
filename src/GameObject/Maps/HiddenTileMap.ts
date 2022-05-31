@@ -1,8 +1,8 @@
-import { Gameobject } from "./Gameobject";
-import { Vector } from "../Main/Vector";
-import { Canvas } from "../Main/Canvas";
-import { Layers } from "../Main/Layers";
-import { Stats } from "../Main/Stats";
+import { Gameobject } from "../Gameobject";
+import { Vector } from "../../Main/Vector";
+import { Canvas } from "../../Main/Canvas";
+import { Layers } from "../../Main/Layers";
+import { Stats } from "../../Main/Stats";
 
 class HiddenTileMap extends Gameobject
 {

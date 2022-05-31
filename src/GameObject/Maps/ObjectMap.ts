@@ -1,16 +1,16 @@
-import { Gameobject } from "./Gameobject";
-import { Vector } from "../Main/Vector";
-import { Canvas } from "../Main/Canvas";
-import { Calculations } from "../Main/Calculations";
-import { PuzzleManager } from "../Game/PuzzleManager";
-import { Layers } from "../Main/Layers";
-import { Stats } from "../Main/Stats";
-import { Number } from "../Main/Number";
+import { Gameobject } from "../Gameobject";
+import { Vector } from "../../Main/Vector";
+import { Canvas } from "../../Main/Canvas";
+import { Calculations } from "../../Main/Calculations";
+import { PuzzleManager } from "../../Game/PuzzleManager";
+import { Layers } from "../../Main/Layers";
+import { Stats } from "../../Main/Stats";
+import { Number } from "../../Main/Number";
 //Ojects
 //Items
-import { HealthRegen } from "./Items/HealthRegen";
+import { HealthRegen } from "../Items/HealthRegen";
 //Monsters
-import { Monster } from "./Monster";
+import { Monster } from "../Monsters/Monster";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //MAP INFO

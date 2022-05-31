@@ -1,9 +1,9 @@
-import { Gameobject } from "./Gameobject";
-import { Vector } from "../Main/Vector";
-import { Calculations } from "../Main/Calculations";
-import { Canvas } from "../Main/Canvas";
-import { Layers } from "../Main/Layers";
-import { PuzzleManager } from "../Game/PuzzleManager";
+import { Gameobject } from "../Gameobject";
+import { Vector } from "../../Main/Vector";
+import { Calculations } from "../../Main/Calculations";
+import { Canvas } from "../../Main/Canvas";
+import { Layers } from "../../Main/Layers";
+import { PuzzleManager } from "../../Game/PuzzleManager";
 
 class Monster extends Gameobject
 {

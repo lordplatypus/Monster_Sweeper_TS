@@ -1,7 +1,7 @@
-import { Gameobject } from "../GameObject/Gameobject";
+import { Gameobject } from "../Gameobject";
 import { Element } from "./Element";
-import { Vector } from "../Main/Vector";
-import { PuzzleManager } from "../Game/PuzzleManager";
+import { Vector } from "../../Main/Vector";
+import { PuzzleManager } from "../../Game/PuzzleManager";
 
 class PlainTile extends Gameobject
 {

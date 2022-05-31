@@ -1,21 +1,21 @@
-import { Gameobject } from "../GameObject/Gameobject";
-import { Vector } from "../Main/Vector";
-import { Canvas } from "../Main/Canvas";
-import { Layers } from "../Main/Layers";
+import { Gameobject } from "../Gameobject";
+import { Vector } from "../../Main/Vector";
+import { Canvas } from "../../Main/Canvas";
+import { Layers } from "../../Main/Layers";
 
 class Element extends Gameobject
 {
-    private canvas_: Canvas;
-    private img_: HTMLImageElement; //player image
+    protected canvas_: Canvas;
+    protected img_: HTMLImageElement; //player image
     //active time
-    private done_: boolean; //finished?
-    private totalTime_: number; //time it takes to finish
+    protected done_: boolean; //finished?
+    protected totalTime_: number; //time it takes to finish
     //Bounce Calcs
-    private timer_: number; //time to apply damp
-    private degree_: number; //for sin
-    private multiplier_: number;
-    private damp_: number;
-    private scaleY_: number; //height scale - change this to get the bounce effect
+    protected timer_: number; //time to apply damp
+    protected degree_: number; //for sin
+    protected multiplier_: number;
+    protected damp_: number;
+    protected scaleY_: number; //height scale - change this to get the bounce effect
     
     constructor(name: string, ID: number, imgSrc: string, position: Vector, size: Vector)
     {
@@ -54,17 +54,17 @@ class Element extends Gameobject
 
     public Draw(layers: Layers)
     {
-        layers.DrawToLayer("TileElement", this.canvas_.CANVAS, this.position_.x, this.position_.y - this.scaleY_ * this.height_);
+        layers.DrawToLayer("TileElement", this.canvas_.CANVAS, this.position_.x, this.position_.y  + this.height_ - this.scaleY_ * this.height_);
     }
 
-    private UpdateCanvas = () =>
+    protected UpdateCanvas = () =>
     {
         if (this.canvas_.CONTEXT === null) return;
         this.canvas_.Clear();
-        this.canvas_.CONTEXT.drawImage(this.img_, 0, 0, this.width_, this.height_, 0, this.height_, this.width_, this.scaleY_ * this.height_);
+        this.canvas_.CONTEXT.drawImage(this.img_, 0, 0, this.width_, this.height_, 0, 0, this.width_, this.scaleY_ * this.height_);
     }
 
-    private Bounce(delta_time: number)
+    protected Bounce(delta_time: number)
     {
         this.degree_ += 5 * delta_time;
         this.timer_ += delta_time;

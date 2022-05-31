@@ -14,7 +14,7 @@ class Layers
         this.layers_.set("Dust", new Canvas(width, height, "Dust")); //Dust Tiles that hide numbers and monsters
         this.layers_.set("TileElement", new Canvas(width, height, "TileElement")); //elements that pop up when a tile is revealed
         this.layers_.set("Number", new Canvas(width, height, "Number")); //Numbers (where the bombs are)
-        this.layers_.set("Object", new Canvas(width, height, "Object")); //Game objects (monsters, trees, flowers, etc)
+        this.layers_.set("Object", new Canvas(width, height, "Object")); //Game objects (monsters, items, etc)
         this.layers_.set("Player", new Canvas(width, height, "Player")); //The player character
         this.layers_.set("Particle", new Canvas(width, height, "Particle")); //particle effects
 

@@ -41,11 +41,12 @@ class ParticleImage extends Particle
         this.alpha_ = startAlpha === undefined? 1 : startAlpha;
         this.startAlpha_ = startAlpha === undefined? 1 : startAlpha;
         this.endAlpha_ = endAlpha === undefined? 1 : endAlpha;
+        this.ALLOWCULLING = true; //if out of camera don't draw
 
         //canvas size is bigger then the image so that if the image is rotated the corners arn't cut off
         const canvasSize: number = Math.sqrt((this.width_ * this.scale_.x) * (this.width_ * this.scale_.x) + (this.height_ * this.scale_.y) * (this.height_ * this.scale_.y));
         this.translate_ = new Vector(canvasSize / 2, canvasSize / 2); //move the canvas to the center for rotation
-        this.tempCanvas_ = new Canvas(canvasSize, canvasSize); 
+        this.tempCanvas_ = new Canvas(canvasSize, canvasSize);
     }
 
     public Update(delta_time: number) 

@@ -28,6 +28,74 @@ class ParticleManager
                                             1, 0, false));  //alpha, allow color
     }
 
+    public Cloud(position: Vector)
+    {
+        const lifespan = (Math.floor(Math.random() * 10) + 10) / 10;
+        const x: number = Math.floor(Math.random() * 26);
+        const y: number = Math.floor(Math.random() * 8) + 2;
+        const pos: Vector = new Vector(position.x + x, position.y + y);
+        var vx: number;
+        vx = (Math.floor(Math.random() * 5) + 5);
+        if (x >= 13) vx = -vx;
+
+        const randomCloud: number = Math.floor(Math.random() * 2);
+        var imageSrc: string;
+        var size: Vector;
+        if (randomCloud === 0)
+        {
+            imageSrc = "Cloud1.png";
+            size = new Vector(6, 3);
+        }
+        else
+        {
+            imageSrc = "Cloud2.png";
+            size = new Vector(5, 3);
+        }
+
+        this.scene_.Add(new ParticleImage(imageSrc, pos,                           //required
+                                            lifespan, 1,                                                    //progression
+                                            size, new Vector(1, 1), new Vector(1, 1),       //image size / scale
+                                            new Vector(vx, 0), new Vector(0, 0), 1,                   //velocity / damp
+                                            0, 0, 1,                                          //angles
+                                            1, 0, false));  //alpha, allow color
+    }
+
+    public Snow(position: Vector)
+    {
+        const lifespan = (Math.floor(Math.random() * 10) + 10) / 10;
+        const x: number = Math.floor(Math.random() * 32) - 2;
+        const y: number = Math.floor(Math.random() * 28) - 8;
+        const pos: Vector = new Vector(position.x + x, position.y + y);
+        const vx: number = Math.floor(Math.random() * 3);
+        const vy: number = (Math.floor(Math.random() * 5) + 5);
+
+        var imageSrc: string;
+        var size: Vector = new Vector(3, 3);
+        switch(Math.floor(Math.random() * 3))
+        {
+            default:
+            imageSrc = "Snowflake.png";
+            size = new Vector(7, 7);
+            break;
+
+            case 1:
+            imageSrc = "Snow.png";
+            break;
+
+            case 2:
+            imageSrc = "Snow2.png";
+            break;
+        }
+
+
+        this.scene_.Add(new ParticleImage(imageSrc, pos,                           //required
+                                            lifespan, 1,                                                    //progression
+                                            size, new Vector(.5, .5), new Vector(.5, .5),       //image size / scale
+                                            new Vector(vx, vy), new Vector(0, 0), 1,                   //velocity / damp
+                                            0, 0, 1,                                          //angles
+                                            1, 0, false));  //alpha, allow color
+    }
+
     // public Sweat(position: Vector)
     // {
     //     const amount: number = Math.floor(Math.random() * 3) + 1;

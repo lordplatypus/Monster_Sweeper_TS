@@ -1,8 +1,7 @@
-import { Gameobject } from "../GameObject/Gameobject";
+import { Gameobject } from "../Gameobject";
 import { Element } from "./Element";
-import { Vector } from "../Main/Vector";
-import { PuzzleManager } from "../Game/PuzzleManager";
-import { EnumType } from "typescript";
+import { Vector } from "../../Main/Vector";
+import { PuzzleManager } from "../../Game/PuzzleManager";
 
 class ForrestTile extends Gameobject
 {

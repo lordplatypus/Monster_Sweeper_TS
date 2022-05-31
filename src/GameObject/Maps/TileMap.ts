@@ -1,13 +1,19 @@
-import { Gameobject } from "./Gameobject";
-import { Vector } from "../Main/Vector";
-import { Canvas } from "../Main/Canvas";
-import { Layers } from "../Main/Layers";
-import { Stats } from "../Main/Stats";
-import { PuzzleManager } from "../Game/PuzzleManager";
-import { Calculations } from "../Main/Calculations";
+import { Gameobject } from "../Gameobject";
+import { Vector } from "../../Main/Vector";
+import { Canvas } from "../../Main/Canvas";
+import { Layers } from "../../Main/Layers";
+import { Stats } from "../../Main/Stats";
+import { PuzzleManager } from "../../Game/PuzzleManager";
+import { Calculations } from "../../Main/Calculations";
 //TILES
 import { PlainTile } from "../Tiles/PlainTile";
 import { ForrestTile } from "../Tiles/ForrestTile";
+import { SwampTile } from "../Tiles/SwampTile";
+import { DesertTile } from "../Tiles/DesertTile";
+import { TundraTile } from "../Tiles/TundraTile";
+import { MountainTile }from "../Tiles/MountainTile";
+import { TownTile }from "../Tiles/TownTile";
+import { IslandTile } from "../Tiles/IslandTile";
 
 class TileMap extends Gameobject
 {
@@ -104,12 +110,36 @@ class TileMap extends Gameobject
             default:
             break;
 
-            case 1:
+            case 1: //Plain
             pm.SCENE.Add(new PlainTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
             break;
 
-            case 2:
+            case 2: //Forest
             pm.SCENE.Add(new ForrestTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+
+            case 3: //Swamp
+            pm.SCENE.Add(new SwampTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+
+            case 4: //Desert
+            pm.SCENE.Add(new DesertTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+
+            case 5: //Tundra
+            pm.SCENE.Add(new TundraTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+
+            case 6: //Mountain
+            pm.SCENE.Add(new MountainTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+
+            case 7: //Town
+            pm.SCENE.Add(new TownTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
+            break;
+
+            case 8: //Island
+            pm.SCENE.Add(new IslandTile(calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), pm));
             break;
         }
     }

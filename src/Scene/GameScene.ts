@@ -31,7 +31,7 @@ class GameScene implements Scene
     public Init() 
     {
         //this.Add(new Background("Background", "Background", 0, new Vector(-32, -32), new Vector(32*11, 32*11), "#888888"));
-        this.Add(new CameraControl("CameraControl", "CC", 0, new Vector(9*32/2, 9*32/2), this.game_.CAMERA));
+        this.Add(new CameraControl(new Vector(9*32/2, 9*32/2), this.game_.CAMERA));
         this.pm_ = new PuzzleManager(this, this.game_.STATS, this.game_.CAMERA);
 
         this.bm_.Init(); //button init

@@ -8,12 +8,11 @@ import { Camera } from "../Main/Camera";
 
 import { ParticleManager } from "../Particles/ParticleManager";
 
-import { TileMap } from "../GameObject/TileMap";
-import { ObjectMap } from "../GameObject/ObjectMap";
-import { HiddenTileMap } from "../GameObject/HiddenTileMap";
+import { TileMap } from "../GameObject/Maps/TileMap";
+import { ObjectMap } from "../GameObject/Maps/ObjectMap";
+import { HiddenTileMap } from "../GameObject/Maps/HiddenTileMap";
 import { NumberMap } from "../GameObject/Maps/NumberMap";
 import { StartPositionSelector } from "../GameObject/StartPositionSelector";
-import { Monster } from "../GameObject/Monster";
 import { Gameobject } from "../GameObject/Gameobject";
 
 class PuzzleManager
