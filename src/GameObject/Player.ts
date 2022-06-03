@@ -142,11 +142,11 @@ class Player extends Gameobject
         }
         this.targetPos_ = this.calcs_.ConvertLocalToWorld(emptyTilePos[minID], 32); //move player to the closest empty tile (near the actual tile clicked)
 
-        //check object collision - if yes then OnCollision() will be called
-        this.pm_.IsObject(local);
-
         //Reveal Tile
         this.pm_.RemoveHiddenTile(local);
+
+        //check object collision - if yes then OnCollision() will be called
+        this.pm_.IsObject(local);
     }
 
     private OnImgLoad = () =>

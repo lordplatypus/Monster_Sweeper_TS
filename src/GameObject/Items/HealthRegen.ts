@@ -9,8 +9,10 @@ class HealthRegen extends Gameobject
 {
     private pm_: PuzzleManager;
     private canvas_: Canvas;
+
+    private hidden_: boolean;
     
-    constructor(ID: number, position: Vector, pm: PuzzleManager)
+    constructor(ID: number, position: Vector, hidden: boolean, pm: PuzzleManager)
     {
         super();
         this.name_ = "HealthRegen";
@@ -20,6 +22,7 @@ class HealthRegen extends Gameobject
         this.width_ = 16;
         this.height_ = 16;
         this.pm_ = pm;
+        this.hidden_ = hidden;
 
         this.canvas_ = new Canvas(this.width_, this.height_);
         if (this.canvas_.CONTEXT === null) return;
@@ -35,6 +38,12 @@ class HealthRegen extends Gameobject
     public OnCollision(other: Gameobject)
     {
         if (other.NAME !== "Player") return; //should only collide with the player
+        
+        if (this.hidden_)
+        {//Item is hidden under Hidden Tile
+            this.hidden_ = false; //but it collided once with the player, so now it is visible
+            return; //return
+        }
 
         this.pm_.PLAYER_MANAGER.HP++; //Heal player +1
         this.Kill(); //remove this item

@@ -11,9 +11,10 @@ class Monster extends Gameobject
     private color_: string;
     private canvas_: Canvas;
 
+    private hidden_: boolean; //is the monster hidden?
     private alive_: boolean; //diff then isDead as isDead is used to delete this object (don't want that in this case)
     
-    constructor(ID: number, position: Vector, pm: PuzzleManager, color?: string)
+    constructor(ID: number, position: Vector, hidden: boolean, pm: PuzzleManager, color?: string)
     {
         super();
         this.name_ = "Monster";
@@ -25,12 +26,13 @@ class Monster extends Gameobject
         this.pm_ = pm;
         this.color_ = color === undefined? "#ffffff" : color;
         this.ALLOWCOLLISIONS = true;
+        this.hidden_ = hidden;
         this.alive_ = true;
 
         this.canvas_ = new Canvas(this.width_, this.height_);
         if (this.canvas_.CONTEXT === null) return;
         this.canvas_.CONTEXT.fillStyle = this.color_;
-        this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);    
+        this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);
     }
 
     public Draw(layers: Layers)
@@ -44,14 +46,20 @@ class Monster extends Gameobject
 
         this.pm_.PLAYER_MANAGER.HP -= this.CalculatePower();
         const calcs_: Calculations = new Calculations(); //get calcs for next line
-        if (!this.pm_.HIDDEN_TILE_MAP.IsTile(calcs_.ConvertWorldToLocal(this.position_, this.pm_.STATS.TILE_SIZE))) this.Kill();
+        if (!this.hidden_) this.Kill(); //only dies if visible
+        else this.hidden_ = false; //collided once, therefor it is now visible
     }
 
     public Kill()
     {
-        this.alive_ = false;
+        this.alive_ = false; //dead flag
+        const calcs_: Calculations = new Calculations();
+        this.pm_.AddItem(calcs_.ConvertWorldToLocal(this.position_, this.pm_.STATS.TILE_SIZE)); //add item to map upon death
+        //*NOTE: adding an item at the monsters location changes the object map to show the item, thus removing the monster from the map
+        //they won't be added for other monsters power calcs because of this
+        //TEMP
         if (this.canvas_.CONTEXT === null) return;
-        this.canvas_.CONTEXT.fillStyle = "Red";
+        this.canvas_.CONTEXT.fillStyle = "Red"; //change to red to show dead - change to sprite later
         this.canvas_.CONTEXT.fillRect(0, 0, this.width_, this.height_);
     }
 
@@ -62,12 +70,13 @@ class Monster extends Gameobject
         var monsterPower: number = 0; //starting monster power
         for (var y = monsterLocalPos.y - 1; y <= monsterLocalPos.y + 1; y++)
         {
-            if (y < 0 || y >= this.pm_.STATS.ROWS) continue;
+            if (y < 0 || y >= this.pm_.STATS.ROWS) continue; //out of map bounds
             for (var x = monsterLocalPos.x - 1; x <= monsterLocalPos.x + 1; x++)
             {
-                if (x < 0 || x >= this.pm_.STATS.COLUMNS) continue;
+                if (x < 0 || x >= this.pm_.STATS.COLUMNS) continue; //out of map bounds
                 if (monsterLocalPos.x === x && monsterLocalPos.y === y) continue; //don't count self
                 if (this.pm_.IsTile(new Vector(x, y))) monsterPower++; //+1 power for every nearby tile that has not been revealed
+                if (this.pm_.OBJECT_MAP.IsMonster(new Vector(x, y))) monsterPower++; //+1 power for every nearby monster
             }
         }
         return monsterPower;

@@ -53,6 +53,8 @@ class PuzzleManager
         this.scene_.Add(new StartPositionSelector(this));
     }
 
+    //INIT
+
     public PickEmptyTiles(startPos: Vector)
     {
         const calcs: Calculations = new Calculations(); //Calc functions
@@ -130,23 +132,10 @@ class PuzzleManager
             //if passes all checks add to list
             this.objectMap_.AddMonsterToMap(new Vector(x, y)); //add monster to map
             this.numberMap_.AddMonsterToMap(new Vector(x, y));
-            //this.scene_.Add(new Monster(calcs.ConvertLocalToID(new Vector(x, y), this.stats_.ROWS, this.stats_.COLUMNS), new Vector(x*32, y*32), this, "Green")); //add "physical" monster
             monsterNum--; //one less monster to add
         }
         this.numberMap_.UpdateRevealedNumbers(this);
-        //this.UpdateInitNumbers();
     }
-
-    // private UpdateInitNumbers()
-    // {//init hidden tiles are revealed before monsters are place, so this will update the numbers so that they show up (only needed after Placing Monsters)
-    //     for (var y = 0; y < this.stats_.ROWS; y++)
-    //     {
-    //         for (var x = 0; x < this.stats_.COLUMNS; x++)
-    //         {
-    //             if (!this.hiddenTileMap_.IsTile(new Vector(x, y))) this.objectMap_.DisplayNumber(new Vector(x, y));
-    //         }
-    //     }
-    // }
 
     //Map Checks
 
@@ -163,13 +152,14 @@ class PuzzleManager
         if (this.objectMap_.IsMonster(localPos))
         {//is it a monster?
             didCollide = true;
-            if (this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnMonster(localPos, this); //spawn monster now so that I can place it on a layer above tile elements
+            //if (this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnMonster(this, localPos); //spawn monster now so that I can place it on a layer above tile elements
             tag = "Monster";
         }
 
         if (!didCollide && this.objectMap_.IsItem(localPos)) 
         {//is it an item?
             didCollide = true;
+            //if (this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnItem(this, localPos); //spawn item now so that I can place it on a layer above tile elements
             tag = "Item";
         }
 
@@ -180,6 +170,22 @@ class PuzzleManager
         }
 
         return didCollide;
+    }
+
+    //Spawn
+
+    public AddMonster(localPos: Vector, monsterID?: number)
+    {
+        if (this.objectMap_.IsMonster(localPos)) return; //Monster already exists
+        this.objectMap_.AddMonsterToMap(localPos, monsterID); //Add monster to map (dosen't physical spawn in monster yet)
+        if (!this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnMonster(this, localPos, false, monsterID); //Spawn in monster physicaly if there is NO hidden tile
+    }
+
+    public AddItem(localPos: Vector, itemID?: number)
+    {
+        if (this.objectMap_.IsItem(localPos)) return; //Item already exists
+        this.objectMap_.AddItemToMap(localPos, itemID); //Add Item to map (dosen't physical spawn in item yet)
+        if (!this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnItem(this, localPos, false, itemID); //Spawn in item physicaly if there is NO hidden tile
     }
 
     //Collision
@@ -198,9 +204,10 @@ class PuzzleManager
     public RemoveHiddenTile(localPos: Vector)
     {
         if (!this.hiddenTileMap_.RemoveTile(localPos)) return; //if there is a hidden tile remove it and continue with code below
-        //this.objectMap_.DisplayNumber(localPos); //reveals the number
-        this.numberMap_.RevealNumber(localPos);
-        this.tileMap_.AddTileElements(localPos, this); //addes tiles elements
+        this.numberMap_.RevealNumber(localPos); //Display number
+        this.tileMap_.AddTileElements(localPos, this); //addes tile elements
+        if (this.objectMap_.IsMonster(localPos)) this.objectMap_.SpawnMonster(this, localPos, true); //if there is a monster, spawn it
+        if (this.objectMap_.IsItem(localPos)) this.objectMap_.SpawnItem(this, localPos, true); //if there is an item, spawn it
     }
 
     public get OBJECT_MAP(): ObjectMap {return this.objectMap_;}
