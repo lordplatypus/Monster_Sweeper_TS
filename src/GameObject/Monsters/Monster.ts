@@ -54,9 +54,8 @@ class Monster extends Gameobject
     {
         this.alive_ = false; //dead flag
         const calcs_: Calculations = new Calculations();
+        this.pm_.MONSTER_MAP.RemoveMonsterFromMap(calcs_.ConvertWorldToLocal(this.position_, this.pm_.STATS.TILE_SIZE)) //remove monster from collision
         this.pm_.AddItem(calcs_.ConvertWorldToLocal(this.position_, this.pm_.STATS.TILE_SIZE)); //add item to map upon death
-        //*NOTE: adding an item at the monsters location changes the object map to show the item, thus removing the monster from the map
-        //they won't be added for other monsters power calcs because of this
         //TEMP
         if (this.canvas_.CONTEXT === null) return;
         this.canvas_.CONTEXT.fillStyle = "Red"; //change to red to show dead - change to sprite later
@@ -76,7 +75,7 @@ class Monster extends Gameobject
                 if (x < 0 || x >= this.pm_.STATS.COLUMNS) continue; //out of map bounds
                 if (monsterLocalPos.x === x && monsterLocalPos.y === y) continue; //don't count self
                 if (this.pm_.IsTile(new Vector(x, y))) monsterPower++; //+1 power for every nearby tile that has not been revealed
-                if (this.pm_.OBJECT_MAP.IsMonster(new Vector(x, y))) monsterPower++; //+1 power for every nearby monster
+                if (this.pm_.MONSTER_MAP.IsMonster(new Vector(x, y))) monsterPower++; //+1 power for every nearby monster
             }
         }
         return monsterPower;

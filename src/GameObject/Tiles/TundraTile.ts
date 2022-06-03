@@ -23,7 +23,7 @@ class TundraTile extends Gameobject
     public Update(delta_time: number) 
     {
         this.timer_ += delta_time;
-        if (this.timer_ > .01)
+        if (this.timer_ > .05)
         {
             this.timer_ = 0;
             this.pm_.PARTICLE_MANAGER.Snow(this.position_);

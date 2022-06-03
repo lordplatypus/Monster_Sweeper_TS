@@ -4,31 +4,27 @@ import { Calculations } from "../../Main/Calculations";
 import { PuzzleManager } from "../../Game/PuzzleManager";
 import { Layers } from "../../Main/Layers";
 import { Stats } from "../../Main/Stats";
-//Ojects
-//Items
-import { HealthRegen } from "../Items/HealthRegen";
 //Monsters
 import { Monster } from "../Monsters/Monster";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //MAP INFO
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//if Map[y][x] === 0 then there is NO object NOR Item
-//if Map[y][x] > 0 then there is an ITEM
-//else Map[y][x] < 0 then there is a MONSTER
+//if Map[y][x] === 0 then there is NO Monster
+//if Map[y][x] > 0 then there is a MONSTER
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //MAP INFO
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ObjectMap extends Gameobject
+class MonsterMap extends Gameobject
 {
     private stats_: Stats;
     private map_: number[][];
 
-    constructor(stats: Stats, monsterPositions?: Vector[])
+    constructor(stats: Stats)
     {
         super();
-        this.name_ = "ObjectMap";
+        this.name_ = "Monster";
         this.tag_ = "Map";
         this.ID_ = 0;
         this.position_ = new Vector(0, 0);
@@ -38,14 +34,6 @@ class ObjectMap extends Gameobject
         this.stats_ = stats;
         this.map_ = [[]];
         this.Init();
-
-        if (monsterPositions !== undefined)
-        {
-            for (var i = 0; i < monsterPositions.length; i++)
-            {
-                this.AddMonsterToMap(monsterPositions[i]);
-            }
-        }
     }
 
     private Init()
@@ -65,12 +53,7 @@ class ObjectMap extends Gameobject
 
     public AddMonsterToMap(localPos: Vector, monsterID?: number)
     {
-        this.map_[localPos.y][localPos.x] = monsterID === undefined? -1 : monsterID;
-    }
-
-    public AddItemToMap(localPos: Vector, itemID?: number)
-    {
-        this.map_[localPos.y][localPos.x] = itemID === undefined? 1 : itemID;
+        this.map_[localPos.y][localPos.x] = monsterID === undefined? 1 : monsterID;
     }
 
     public SpawnMonster(pm: PuzzleManager, localPos: Vector, hidden: boolean, monsterID?: number)
@@ -84,39 +67,22 @@ class ObjectMap extends Gameobject
             pm.SCENE.Add(new Monster(calcs.ConvertLocalToID(localPos, this.stats_.ROWS, this.stats_.COLUMNS), calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), hidden, pm));
             break;
 
-            case -1:
+            case 1:
             pm.SCENE.Add(new Monster(calcs.ConvertLocalToID(localPos, this.stats_.ROWS, this.stats_.COLUMNS), calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), hidden, pm));
             break;
         }
     }
 
-    public SpawnItem(pm: PuzzleManager, localPos: Vector, hidden: boolean, itemID?: number)
-    {
-        const ID: number = itemID === undefined? this.map_[localPos.y][localPos.x] : itemID;
-        if (itemID !== undefined) this.map_[localPos.y][localPos.x] = itemID;
-        const calcs: Calculations = new Calculations();
-        switch(ID)
-        {
-            default:
-            break;
-
-            case 1:
-            pm.SCENE.Add(new HealthRegen(calcs.ConvertLocalToID(localPos, this.stats_.ROWS, this.stats_.COLUMNS), calcs.ConvertLocalToWorld(localPos, this.stats_.TILE_SIZE), hidden, pm));
-            break;
-        }
+    public RemoveMonsterFromMap(localPos: Vector)
+    {//This only removes the monster ID from the map, it DOES NOT physicaly remove the monster - This effectivly removes the monster from collisions
+        this.map_[localPos.y][localPos.x] = 0;
     }
 
     public IsMonster(localPos: Vector): boolean
-    {
-        if (this.map_[localPos.y][localPos.x] < 0) return true;
-        return false;
-    }
-
-    public IsItem(localPos: Vector): boolean
     {
         if (this.map_[localPos.y][localPos.x] > 0) return true;
         return false;
     }
 }
 
-export { ObjectMap };
+export { MonsterMap };

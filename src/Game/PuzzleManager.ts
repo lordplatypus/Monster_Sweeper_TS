@@ -9,7 +9,8 @@ import { Camera } from "../Main/Camera";
 import { ParticleManager } from "../Particles/ParticleManager";
 
 import { TileMap } from "../GameObject/Maps/TileMap";
-import { ObjectMap } from "../GameObject/Maps/ObjectMap";
+import { MonsterMap } from "../GameObject/Maps/MonsterMap";
+import { ItemMap } from "../GameObject/Maps/ItemMap";
 import { HiddenTileMap } from "../GameObject/Maps/HiddenTileMap";
 import { NumberMap } from "../GameObject/Maps/NumberMap";
 import { StartPositionSelector } from "../GameObject/StartPositionSelector";
@@ -26,7 +27,8 @@ class PuzzleManager
 
     private tileMap_: TileMap;
     private hiddenTileMap_: HiddenTileMap;
-    private objectMap_: ObjectMap;
+    private monsterMap_: MonsterMap;
+    private itemMap_: ItemMap;
     private numberMap_: NumberMap;
 
     constructor(scene: Scene, stats: Stats, camera: Camera)
@@ -41,12 +43,12 @@ class PuzzleManager
 
         this.tileMap_ = new TileMap(stats);
         this.hiddenTileMap_ = new HiddenTileMap(stats);
-        this.objectMap_ = new ObjectMap(stats);
+        this.monsterMap_ = new MonsterMap(stats);
+        this.itemMap_ = new ItemMap(stats);
         this.numberMap_ = new NumberMap(stats);
 
         this.scene_.Add(this.tileMap_);
         this.scene_.Add(this.hiddenTileMap_);
-        //this.scene_.Add(this.objectMap_);
         this.scene_.Add(this.numberMap_);
 
         const startPos: Vector = new Vector(Math.floor(this.stats_.COLUMNS/2) * 32, Math.floor(this.stats_.ROWS/2) * 32);
@@ -127,10 +129,10 @@ class PuzzleManager
             const y: number = Math.floor(Math.random() * this.stats_.ROWS);
 
             if (!this.hiddenTileMap_.IsTile(new Vector(x, y))) continue; //if there is no hidden tile, DON'T place monster
-            if (this.objectMap_.IsMonster(new Vector(x, y))) continue; //monster already exists at that position
+            if (this.monsterMap_.IsMonster(new Vector(x, y))) continue; //monster already exists at that position
 
             //if passes all checks add to list
-            this.objectMap_.AddMonsterToMap(new Vector(x, y)); //add monster to map
+            this.monsterMap_.AddMonsterToMap(new Vector(x, y)); //add monster to map
             this.numberMap_.AddMonsterToMap(new Vector(x, y));
             monsterNum--; //one less monster to add
         }
@@ -149,14 +151,14 @@ class PuzzleManager
         var didCollide: boolean = false; //player collided with something?
         var tag: string = "";
 
-        if (this.objectMap_.IsMonster(localPos))
+        if (this.monsterMap_.IsMonster(localPos))
         {//is it a monster?
             didCollide = true;
             //if (this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnMonster(this, localPos); //spawn monster now so that I can place it on a layer above tile elements
             tag = "Monster";
         }
 
-        if (!didCollide && this.objectMap_.IsItem(localPos)) 
+        if (!didCollide && this.itemMap_.IsItem(localPos)) 
         {//is it an item?
             didCollide = true;
             //if (this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnItem(this, localPos); //spawn item now so that I can place it on a layer above tile elements
@@ -176,16 +178,16 @@ class PuzzleManager
 
     public AddMonster(localPos: Vector, monsterID?: number)
     {
-        if (this.objectMap_.IsMonster(localPos)) return; //Monster already exists
-        this.objectMap_.AddMonsterToMap(localPos, monsterID); //Add monster to map (dosen't physical spawn in monster yet)
-        if (!this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnMonster(this, localPos, false, monsterID); //Spawn in monster physicaly if there is NO hidden tile
+        if (this.monsterMap_.IsMonster(localPos)) return; //Monster already exists
+        this.monsterMap_.AddMonsterToMap(localPos, monsterID); //Add monster to map (dosen't physical spawn in monster yet)
+        if (!this.HIDDEN_TILE_MAP.IsTile(localPos)) this.monsterMap_.SpawnMonster(this, localPos, false, monsterID); //Spawn in monster physicaly if there is NO hidden tile
     }
 
     public AddItem(localPos: Vector, itemID?: number)
     {
-        if (this.objectMap_.IsItem(localPos)) return; //Item already exists
-        this.objectMap_.AddItemToMap(localPos, itemID); //Add Item to map (dosen't physical spawn in item yet)
-        if (!this.HIDDEN_TILE_MAP.IsTile(localPos)) this.objectMap_.SpawnItem(this, localPos, false, itemID); //Spawn in item physicaly if there is NO hidden tile
+        if (this.itemMap_.IsItem(localPos)) return; //Item already exists
+        this.itemMap_.AddItemToMap(localPos, itemID); //Add Item to map (dosen't physical spawn in item yet)
+        if (!this.HIDDEN_TILE_MAP.IsTile(localPos)) this.itemMap_.SpawnItem(this, localPos, false, itemID); //Spawn in item physicaly if there is NO hidden tile
     }
 
     //Collision
@@ -206,11 +208,12 @@ class PuzzleManager
         if (!this.hiddenTileMap_.RemoveTile(localPos)) return; //if there is a hidden tile remove it and continue with code below
         this.numberMap_.RevealNumber(localPos); //Display number
         this.tileMap_.AddTileElements(localPos, this); //addes tile elements
-        if (this.objectMap_.IsMonster(localPos)) this.objectMap_.SpawnMonster(this, localPos, true); //if there is a monster, spawn it
-        if (this.objectMap_.IsItem(localPos)) this.objectMap_.SpawnItem(this, localPos, true); //if there is an item, spawn it
+        if (this.monsterMap_.IsMonster(localPos)) this.monsterMap_.SpawnMonster(this, localPos, true); //if there is a monster, spawn it
+        if (this.itemMap_.IsItem(localPos)) this.itemMap_.SpawnItem(this, localPos, true); //if there is an item, spawn it
     }
 
-    public get OBJECT_MAP(): ObjectMap {return this.objectMap_;}
+    public get MONSTER_MAP(): MonsterMap {return this.monsterMap_;}
+    public get ITEM_MAP(): ItemMap {return this.itemMap_;}
     public get HIDDEN_TILE_MAP(): HiddenTileMap {return this.hiddenTileMap_;}
 
     public get SCENE(): Scene {return this.scene_;}
